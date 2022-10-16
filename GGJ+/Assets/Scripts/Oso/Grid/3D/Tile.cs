@@ -68,6 +68,7 @@ public class Tile : MonoBehaviour,IPointerClickHandler
 
     public void UpdateTile()
     {
+
         SetObstacle();
 
         Color color;        
@@ -76,15 +77,12 @@ public class Tile : MonoBehaviour,IPointerClickHandler
 
         transform.GetComponentInChildren<Renderer>().material.SetColor("_Color", color);
 
-        if (!isNeighbor)
-            return;
+        //if (obstacle == null)
+        //    return;
 
-        if (obstacle == null)
-            return;
-
-        color = (obstacle.isMovable) ? new Color(255, 120, 0) : Color.red;
+        //color = (obstacle.isMovable) ? new Color(255, 120, 0) : Color.red;
        
-        transform.GetComponentInChildren<Renderer>().material.SetColor("_Color", color);
+        //transform.GetComponentInChildren<Renderer>().material.SetColor("_Color", color);
 
     }
 

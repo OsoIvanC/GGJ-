@@ -107,6 +107,8 @@ public class PlayerController : MonoBehaviour
 
         playerMovements--;
 
+        GameController.instance.RandomizeObstacles();
+        
         Debug.Log($"Movimientos del jugador : {playerMovements} ");
         
         //UpdateArrowsUI(activeTile._Neighbors);
@@ -140,7 +142,7 @@ public class PlayerController : MonoBehaviour
         foreach (Tile t in tile._Neighbors.GetNeighbors())
         {
            t.SetObstacle();
-           t.UpdateTile();
+           //t.UpdateTile();
         }
 
         return tile;
@@ -246,7 +248,7 @@ public class PlayerController : MonoBehaviour
             {
                 tile.isNeighbor = false;
 
-                //tile.SetObstacle();
+                tile.SetObstacle();
                 tile.obstacle = null;
 
                 tile.UpdateTile();
@@ -261,7 +263,7 @@ public class PlayerController : MonoBehaviour
         {
             tile.isNeighbor = true;
 
-            //tile.SetObstacle();
+            tile.SetObstacle();
 
             tile.UpdateTile();
         }

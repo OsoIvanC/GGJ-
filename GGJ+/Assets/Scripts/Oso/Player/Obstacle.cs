@@ -35,7 +35,14 @@ public class Obstacle : MonoBehaviour
         // Debug.DrawRay(rayPoint.position, transform.TransformDirection(Vector3.forward) * rayDistance);
     }
 
-   
+    public void UpdateObs()
+    {
+        Color color;
+
+        color = (isMovable) ? Color.yellow : Color.red;
+
+        transform.GetComponentInChildren<Renderer>().material.SetColor("_Color", color);
+    }
     public void Move(Vector3 pos)
     {
         //Debug.Log("moving");
