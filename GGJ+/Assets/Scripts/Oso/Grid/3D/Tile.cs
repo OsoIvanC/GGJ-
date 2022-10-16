@@ -34,15 +34,13 @@ public struct Neighbors
 public class Tile : MonoBehaviour,IPointerClickHandler
 {
     public Neighbors _Neighbors;
-
-    public Camera camera;
-
+ 
     public bool isNeighbor;
 
-    private void Awake()
-    {
-        camera = Camera.main;
-    }
+    public Obstacle obstacle;
+
+    public LayerMask obstacleMask;
+
 
     public void ChangeColor()
     {
@@ -50,12 +48,34 @@ public class Tile : MonoBehaviour,IPointerClickHandler
         transform.GetComponentInChildren<Renderer>().material.SetColor("_Color",color) ;
     }
 
+    public Obstacle GetObstacle()
+    {
+
+        if (!isNeighbor)
+            return null;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position,transform.up, out hit,1, obstacleMask))
+        {
+            return hit.collider.GetComponent<Obstacle>();
+        }
+
+        return null;
+    }
+
+
+    public void UpdateTile()
+    {
+
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
 
         RaycastHit hit;
         
-        Ray ray = camera.ScreenPointToRay(eventData.position);
+        Ray ray = Camera.main.ScreenPointToRay(eventData.position);
 
         if (Physics.Raycast(ray, out hit))
         {

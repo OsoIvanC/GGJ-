@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour
 {
 
     public static PlayerController instance;
+
+    public int playerMovements = 10; 
 
     public Tile activeTile;
 
@@ -26,6 +29,9 @@ public class PlayerController : MonoBehaviour
 
     public GameObject obstacle;
 
+    [Header("UI")]
+    public GameObject[] arrowsUI;
+    public TMP_Text playerMoves;
 
     private void Awake()
     {
@@ -35,6 +41,11 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         activeTile = GetActiveTile();
+
+        if(activeTile != null)
+            UpdateArrowsUI(activeTile._Neighbors);
+
+        //playerMoves.text = $"Movements Left {playerMovements}";
     }
 
 
@@ -45,14 +56,34 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
+    public void UpdateArrowsUI(Neighbors n)
+    {
+
+        arrowsUI[0].SetActive((n.North != null) ? true : false) ;
+        arrowsUI[1].SetActive((n.South != null) ? true : false);
+        arrowsUI[2].SetActive((n.West != null) ? true : false);
+        arrowsUI[3].SetActive((n.East != null) ? true : false);
+
+    }
+
+    
+
+
     public void Move(Vector3 pos)
     {
+
+        if (playerMovements <= 0)
+            return;
+
         Debug.Log("moving");
 
         if (isMoving)
             return;
 
         //Debug.Log(pos);
+
+
 
         if (!CanMove(pos))
             return;
@@ -64,12 +95,22 @@ public class PlayerController : MonoBehaviour
 
         Tween t = transform.DOMove(pos, speed, true).SetEase(Ease.InOutSine);
        
+        
         t.Complete( isMoving = false);
-        
+
         t.Complete(activeTile = GetActiveTile());
+
+        UpdateArrowsUI(activeTile._Neighbors);
+
+        playerMovements--;
+
+        Debug.Log($"Movimientos del jugador : {playerMovements} ");
         
-       
+        //UpdateArrowsUI(activeTile._Neighbors);
+
     }
+
+    
     Tile GetActiveTile()
     {
         RaycastHit hit;
@@ -90,10 +131,17 @@ public class PlayerController : MonoBehaviour
                 GetActiveNeighbors(tile);
             }
         }
-        
+
+        //Set Obstacles
+
+        foreach (Tile t in tile._Neighbors.GetNeighbors())
+        {
+            t.obstacle = t.GetObstacle();
+        }
+
         return tile;
     }
-    
+
     
     public bool CanMove(Vector3 dir)
     {
@@ -180,18 +228,11 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void Push()
-    {
-        if (obstacle == null)
-            return;
-    }
 
-    void Pull()
+    private void LateUpdate()
     {
-        if (obstacle == null)
-            return;
+        //playerMoves.text = $"Movements Left {playerMovements}";
     }
-
 
     void GetActiveNeighbors(Tile t)
     {

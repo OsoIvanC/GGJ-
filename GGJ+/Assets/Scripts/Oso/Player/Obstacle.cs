@@ -16,8 +16,14 @@ public class Obstacle : MonoBehaviour
     [SerializeField]
     float speed;
 
+    [SerializeField]
+    bool isMovable;
+
     public bool CanMove(Vector3 dir)
     {
+        if(!isMovable)
+            return false;
+
         RaycastHit hit;
 
         Debug.DrawRay(transform.position + new Vector3(0.5f, 0.2f, 0.5f), dir, Color.yellow, 5);
@@ -35,6 +41,10 @@ public class Obstacle : MonoBehaviour
     {
         //Debug.Log("moving");
 
+
+        if (!isMovable)
+            return;
+        
         if (isMoving)
             return;
 
@@ -46,6 +56,8 @@ public class Obstacle : MonoBehaviour
         //Debug.DrawRay(transform.position, pos, Color.black,5) ;
         
         //Debug.Log(pos);
+
+
 
         isMoving = true;
 
