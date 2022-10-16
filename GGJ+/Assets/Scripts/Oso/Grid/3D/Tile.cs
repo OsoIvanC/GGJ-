@@ -70,7 +70,8 @@ public class Tile : MonoBehaviour,IPointerClickHandler
 
             Vector3 pos = t.GetComponentInChildren<Transform>().position;
 
-            Debug.Log(pos);
+            //PlayerController.instance.canMove = PlayerController.instance.CanMove(pos);
+            //Debug.Log(pos);
 
             PlayerController.instance.Move(pos);
         }
