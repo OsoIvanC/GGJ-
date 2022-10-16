@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using Unity.VisualScripting;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,25 +30,38 @@ public class PlayerController : MonoBehaviour
 
     public GameObject obstacle;
 
+    public bool hasWon;
+
     [Header("UI")]
     public GameObject[] arrowsUI;
     public TMP_Text playerMoves;
 
+    [SerializeField]
+    Vector3 offset;
+
+     AudioSource source;
+    public AudioClip moveClip;
+
+
     private void Awake()
     {
         instance = this;
+
+        source = GetComponent<AudioSource>();
+
+        playerMoves = GameObject.Find("Moves").GetComponent<TMP_Text>();
     }
 
     private void Start()
     {
         activeTile = GetActiveTile();
 
-        if(activeTile != null)
-            UpdateArrowsUI(activeTile._Neighbors);
+        UpdateArrowsUI(activeTile._Neighbors);
 
         //Time.timeScale = 0;
 
-        //playerMoves.text = $"Movements Left {playerMovements}";
+        if(playerMoves != null)
+            playerMoves.text = $"Movements Left {playerMovements}";
     }
 
 
@@ -91,8 +105,7 @@ public class PlayerController : MonoBehaviour
 
         if (!CanMove(pos))
             return;
-
-
+        
         isMoving = true;
 
         CheckPull(pos);
@@ -103,9 +116,17 @@ public class PlayerController : MonoBehaviour
 
         t.Complete(activeTile = GetActiveTile());
 
+        source.PlayOneShot(moveClip);
+
+        //CheckWin
+        if (activeTile.isGoal)
+            Win();
+
         UpdateArrowsUI(activeTile._Neighbors);
 
         playerMovements--;
+
+        playerMoves.text = $"Movements Left {playerMovements}";
 
         GameController.instance.RandomizeObstacles();
         
@@ -122,9 +143,9 @@ public class PlayerController : MonoBehaviour
 
         Tile tile = null;
 
-        //Debug.DrawRay(transform.position + new Vector3(0.5f, 0.5f, 0.5f), -transform.up, Color.red);
+        Debug.DrawRay(transform.position + offset, -transform.up, Color.blue);
 
-        if( Physics.Raycast(transform.position + new Vector3(0.5f,0.5f,0.5f), -transform.up, out hit, 2f, tileMask))
+        if( Physics.Raycast(transform.position + offset , -transform.up, out hit, 2f, tileMask))
         {
             //Debug.Log(hit.collider.name);
 
@@ -137,18 +158,28 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        
+
         //Set Obstacles
 
         foreach (Tile t in tile._Neighbors.GetNeighbors())
         {
            t.SetObstacle();
-           //t.UpdateTile();
+           t.UpdateTile();
         }
 
         return tile;
     }
 
     
+
+    public void  Win()
+    {
+        Debug.Log("Has Won");        
+        hasWon = true;
+        Timer.instance.PauseMenu();
+    }
+
     public bool CanMove(Vector3 dir)
     {
         RaycastHit hit;
@@ -156,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
         //Debug.DrawRay(transform.position + new Vector3(0.5f, 0.5f, 0.5f), dir - transform.position , Color.red,5);
 
-        if (Physics.Raycast(transform.position + new Vector3(0.5f, 0.2f, 0.5f), dir - transform.position, out hit, 1f, obstacleMask))
+        if (Physics.Raycast(transform.position + new Vector3(0.5f, 0.25f, 0.5f), dir - transform.position, out hit, 1f, obstacleMask))
         {
             Vector3 hitDir = hit.normal;
 
@@ -164,13 +195,16 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log(-hitDir);
 
-            Debug.DrawRay(transform.position + new Vector3(0.5f, 0.2f, 0.5f), hitDir, Color.blue,5);
+            Debug.DrawRay(transform.position + new Vector3(0.5f, 0.25f, 0.5f), hitDir, Color.blue,5);
 
             if (hit.collider != null)
             {
                 //Debug.Log("Cant Move");
                 
                 //return false;
+
+                if(hit.collider.CompareTag("WALL"))
+                    return false;
 
                 Obstacle obs = hit.collider.GetComponent<Obstacle>();
 
@@ -211,16 +245,13 @@ public class PlayerController : MonoBehaviour
 
             if (hit.collider != null)
             {
-                //Debug.Log("Cant Move");
-
-                //return false;
+                
 
                 Obstacle obs = hit.collider.GetComponent<Obstacle>();
 
-                if (obs.CanMove(hitDir))
+                if (obs != null && obs.CanMove(hitDir))
                 {
                     obs.Move(hitDir);
-                    
                 }
              
             }
@@ -234,11 +265,11 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
-    private void LateUpdate()
+    void CheckWin()
     {
-        //playerMoves.text = $"Movements Left {playerMovements}";
+
     }
+
 
     void GetActiveNeighbors(Tile t)
     {

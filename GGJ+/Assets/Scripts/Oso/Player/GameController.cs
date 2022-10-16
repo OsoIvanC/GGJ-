@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
     public List<Obstacle> obstacles;
-
+    public List<Obstacle> staticObs; 
+    public List<Obstacle> movableObs;
     public int staticCount;
 
- 
+    int count;
 
     public static GameController instance;
 
@@ -16,22 +18,48 @@ public class GameController : MonoBehaviour
     {
         instance = this;
 
-
+        InitObs();
         RandomizeObstacles();
     }
 
+    void InitObs()
+    {
+        movableObs.Clear();
+        staticObs.Clear();
+
+        foreach (Obstacle obs in obstacles)
+        {
+            obs.isMovable = true;
+
+            movableObs.Add(obs);
+        }
+    }
     public void RandomizeObstacles()
     {
-       
+        InitObs();
+
         for (int i = 0; i < staticCount; i++)
         {
-            int random = Random.Range(i, obstacles.Count - 1);
+            int r = Random.Range(0, movableObs.Count);
 
-            int r = Random.Range(0, 2);
+            staticObs.Add(movableObs[r]);
 
-            obstacles[random].isMovable = (r==0) ? true : false;
+            movableObs.Remove(movableObs[r]);
+        }
+        
+        foreach (Obstacle obs in movableObs)
+        {
+            obs.isMovable = true;
+        }
 
-            obstacles[random].UpdateObs();
+        foreach (Obstacle obs in staticObs)
+        {
+            obs.isMovable = false;
+        }
+
+        foreach (Obstacle obs in obstacles)
+        {
+            obs.UpdateObs();
         }
     }
 

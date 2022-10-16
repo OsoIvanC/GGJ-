@@ -16,6 +16,13 @@ public class Obstacle : MonoBehaviour
 
     public bool isMovable;
 
+
+
+    private void Awake()
+    {
+        UpdateObs();
+    }
+
     public bool CanMove(Vector3 dir)
     {
         if(!isMovable)

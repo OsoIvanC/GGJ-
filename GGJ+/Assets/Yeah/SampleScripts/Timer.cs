@@ -9,6 +9,8 @@ public class Timer : MonoBehaviour
     [SerializeField] private Image uiFill;
     [SerializeField] private Text uiText;
 
+    [SerializeField] private GameObject pauseMenu;
+
     public static Timer instance;  //Singelton
 
     public int Duration;
@@ -59,6 +61,9 @@ public class Timer : MonoBehaviour
 
     public void PauseMenu()
     {
-        Pause = !Pause;       
+        Pause = !Pause;
+
+        pauseMenu.SetActive(Pause);
+        
     }
 }

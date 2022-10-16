@@ -37,15 +37,23 @@ public class Tile : MonoBehaviour,IPointerClickHandler
  
     public bool isNeighbor;
 
+    public bool isGoal;
+
     public Obstacle obstacle;
 
     public LayerMask obstacleMask;
-
+    public LayerMask tileMask;
+    public LayerMask goalMask;
 
     public void ChangeColor()
     {
         Color color = (isNeighbor) ? Color.green : Color.white;
         transform.GetComponentInChildren<Renderer>().material.SetColor("_Color",color) ;
+    }
+
+    private void Awake()
+    {
+        SetWinTile();
     }
 
     public void SetObstacle()
@@ -59,12 +67,25 @@ public class Tile : MonoBehaviour,IPointerClickHandler
 
         if (Physics.Raycast(transform.position + new Vector3(0.5f, -0.2f , 0.5f) , transform.up, out hit,1, obstacleMask))
         {
-            Debug.Log("Hay obstaculo");
+            //Debug.Log("Hay obstaculo");
             obstacle = hit.collider.GetComponent<Obstacle>();
         }
         
     }
 
+    void SetWinTile()
+    {
+       
+        Debug.DrawRay(transform.position + new Vector3(0.5f, -0.2f, 0.5f), transform.up, Color.red, 0.5f);
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position + new Vector3(0.5f, -0.2f, 0.5f), transform.up, out hit, 1, goalMask))
+        {
+           isGoal = true;
+        }
+
+        
+    }
 
     public void UpdateTile()
     {
@@ -93,9 +114,11 @@ public class Tile : MonoBehaviour,IPointerClickHandler
         
         Ray ray = Camera.main.ScreenPointToRay(eventData.position);
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit,Mathf.Infinity, tileMask))
         {
             
+            Debug.Log(hit.collider.name);
+
             if (!hit.collider.GetComponent<Tile>())
                 return;
 
