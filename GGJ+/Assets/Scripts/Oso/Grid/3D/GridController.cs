@@ -49,7 +49,7 @@ public class GridController : MonoBehaviour
 
                 tile.name = "Tile [ " + i + ',' + j + ']';
                
-                tile.AddComponent<Tile>();
+                ///tile.AddComponent<Tile>();
 
                 Tile t = tile.GetComponent<Tile>();
                 grid[i, j] = t;

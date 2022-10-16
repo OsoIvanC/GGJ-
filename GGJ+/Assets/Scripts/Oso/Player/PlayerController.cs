@@ -45,6 +45,8 @@ public class PlayerController : MonoBehaviour
         if(activeTile != null)
             UpdateArrowsUI(activeTile._Neighbors);
 
+        //Time.timeScale = 0;
+
         //playerMoves.text = $"Movements Left {playerMovements}";
     }
 
@@ -73,16 +75,18 @@ public class PlayerController : MonoBehaviour
     public void Move(Vector3 pos)
     {
 
+        //if (Timer.instance.Pause)
+        //    return;
+
         if (playerMovements <= 0)
             return;
-
-        Debug.Log("moving");
-
+        
         if (isMoving)
             return;
 
-        //Debug.Log(pos);
+        //Debug.Log("moving");
 
+        //Debug.Log(pos);
 
 
         if (!CanMove(pos))
@@ -95,7 +99,6 @@ public class PlayerController : MonoBehaviour
 
         Tween t = transform.DOMove(pos, speed, true).SetEase(Ease.InOutSine);
        
-        
         t.Complete( isMoving = false);
 
         t.Complete(activeTile = GetActiveTile());
@@ -111,7 +114,7 @@ public class PlayerController : MonoBehaviour
     }
 
     
-    Tile GetActiveTile()
+    public Tile GetActiveTile()
     {
         RaycastHit hit;
 
@@ -121,7 +124,6 @@ public class PlayerController : MonoBehaviour
 
         if( Physics.Raycast(transform.position + new Vector3(0.5f,0.5f,0.5f), -transform.up, out hit, 2f, tileMask))
         {
-
             //Debug.Log(hit.collider.name);
 
             if(hit.collider.CompareTag("Tile"))
@@ -129,6 +131,7 @@ public class PlayerController : MonoBehaviour
                 tile = hit.collider.GetComponent<Tile>();
 
                 GetActiveNeighbors(tile);
+
             }
         }
 
@@ -136,7 +139,8 @@ public class PlayerController : MonoBehaviour
 
         foreach (Tile t in tile._Neighbors.GetNeighbors())
         {
-            t.obstacle = t.GetObstacle();
+           t.SetObstacle();
+           t.UpdateTile();
         }
 
         return tile;
@@ -241,7 +245,11 @@ public class PlayerController : MonoBehaviour
             foreach (Tile tile in activeNeighbors)
             {
                 tile.isNeighbor = false;
-                tile.ChangeColor();
+
+                //tile.SetObstacle();
+                tile.obstacle = null;
+
+                tile.UpdateTile();
             }
         }
 
@@ -252,7 +260,10 @@ public class PlayerController : MonoBehaviour
         foreach (Tile tile in activeNeighbors)
         {
             tile.isNeighbor = true;
-            tile.ChangeColor();
+
+            //tile.SetObstacle();
+
+            tile.UpdateTile();
         }
     }
 }

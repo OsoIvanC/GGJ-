@@ -48,25 +48,43 @@ public class Tile : MonoBehaviour,IPointerClickHandler
         transform.GetComponentInChildren<Renderer>().material.SetColor("_Color",color) ;
     }
 
-    public Obstacle GetObstacle()
+    public void SetObstacle()
     {
-
         if (!isNeighbor)
-            return null;
+            return;
+
+        Debug.DrawRay(transform.position + new Vector3(0.5f,-0.2f,0.5f), transform.up, Color.red, 0.5f);
 
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position,transform.up, out hit,1, obstacleMask))
+        if (Physics.Raycast(transform.position + new Vector3(0.5f, -0.2f , 0.5f) , transform.up, out hit,1, obstacleMask))
         {
-            return hit.collider.GetComponent<Obstacle>();
+            Debug.Log("Hay obstaculo");
+            obstacle = hit.collider.GetComponent<Obstacle>();
         }
-
-        return null;
+        
     }
 
 
     public void UpdateTile()
     {
+        SetObstacle();
+
+        Color color;        
+        
+        color = isNeighbor ? Color.green : Color.white;
+
+        transform.GetComponentInChildren<Renderer>().material.SetColor("_Color", color);
+
+        if (!isNeighbor)
+            return;
+
+        if (obstacle == null)
+            return;
+
+        color = (obstacle.isMovable) ? new Color(255, 120, 0) : Color.red;
+       
+        transform.GetComponentInChildren<Renderer>().material.SetColor("_Color", color);
 
     }
 

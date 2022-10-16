@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 753278876266864119}
   m_Layer: 7
   m_Name: Obstacle
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &753278876266864113
 Transform:
@@ -64,6 +64,7 @@ MonoBehaviour:
     m_Bits: 128
   isMoving: 0
   speed: 5
+  isMovable: 1
 --- !u!1 &753278876681894577
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,7 +81,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &753278876681894582
 Transform:

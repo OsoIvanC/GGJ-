@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &382659023749581983
 Transform:
@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 382659024592146315}
   - component: {fileID: 4284171308607720849}
   - component: {fileID: -3777430841823363506}
+  - component: {fileID: -2086088006520965350}
   m_Layer: 6
   m_Name: Tile
   m_TagString: Tile
@@ -146,3 +147,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &-2086088006520965350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382659024592146314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa80f5a3b83451439cb0b7165c18686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Neighbors:
+    North: {fileID: 0}
+    South: {fileID: 0}
+    East: {fileID: 0}
+    West: {fileID: 0}
+  isNeighbor: 0
+  obstacle: {fileID: 0}
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 128

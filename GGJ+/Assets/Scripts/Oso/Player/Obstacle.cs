@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-   
-    
     [SerializeField]
     LayerMask mask;
 
@@ -16,8 +14,7 @@ public class Obstacle : MonoBehaviour
     [SerializeField]
     float speed;
 
-    [SerializeField]
-    bool isMovable;
+    public bool isMovable;
 
     public bool CanMove(Vector3 dir)
     {
@@ -37,6 +34,8 @@ public class Obstacle : MonoBehaviour
         return true;
         // Debug.DrawRay(rayPoint.position, transform.TransformDirection(Vector3.forward) * rayDistance);
     }
+
+   
     public void Move(Vector3 pos)
     {
         //Debug.Log("moving");
@@ -47,17 +46,6 @@ public class Obstacle : MonoBehaviour
         
         if (isMoving)
             return;
-
-        //Debug.Log(pos);
-
-        //if (!CanMove(pos))
-        //    return;
-
-        //Debug.DrawRay(transform.position, pos, Color.black,5) ;
-        
-        //Debug.Log(pos);
-
-
 
         isMoving = true;
 
