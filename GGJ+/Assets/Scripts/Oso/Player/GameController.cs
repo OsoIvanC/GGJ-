@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour
         instance = this;
 
         InitObs();
-        RandomizeObstacles();
+        //RandomizeObstacles();
     }
 
     void InitObs()
@@ -32,6 +32,11 @@ public class GameController : MonoBehaviour
             obs.isMovable = true;
 
             movableObs.Add(obs);
+        }
+
+        foreach (Obstacle obs in obstacles)
+        {
+            obs.UpdateObs();
         }
     }
     public void RandomizeObstacles()

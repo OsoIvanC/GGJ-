@@ -16,10 +16,15 @@ public class Obstacle : MonoBehaviour
 
     public bool isMovable;
 
+    public bool isTree;
+
+    public Color myColor;
 
 
     private void Awake()
     {
+        myColor = transform.GetComponentInChildren<Renderer>().material.GetColor("_Color");
+
         UpdateObs();
     }
 

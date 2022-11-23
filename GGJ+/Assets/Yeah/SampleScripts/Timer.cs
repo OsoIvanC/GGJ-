@@ -9,26 +9,32 @@ public class Timer : MonoBehaviour
     [SerializeField] private Image uiFill;
     [SerializeField] private Text uiText;
 
-    [SerializeField] private GameObject pauseMenu;
-
-    public static Timer instance;  //Singelton
+    public static Timer instance;
 
     public int Duration;
 
     public bool Pause;
 
+    public GameObject YouLose; //Canvas de Game Over
+    public GameObject PauseIcon;//Icono de Pausa
     private int remainingDuration;
-    // Start is called before the first frame update
+
+    [Header("Sounds")]
+    [SerializeField] AudioSource AudioShido;
+    public AudioClip Loser;
 
     private void Awake()
     {
         instance = this;
-
-       
     }
+
+    // Start is called before the first frame update
     void Start()
     {
+
         Being(Duration);
+        //YOU WIN
+        //AudioShido = GetComponent<AudioSource>();
     }
 
     private void Being(int Second)
@@ -43,27 +49,34 @@ public class Timer : MonoBehaviour
         {
             if (!Pause)
             {
+                //Time.timeScale = 1;
                 uiText.text = $"{remainingDuration / 60:00}:{remainingDuration % 60:00}";
                 uiFill.fillAmount = Mathf.InverseLerp(0, Duration, remainingDuration);
                 remainingDuration--;
                 yield return new WaitForSeconds(1f);
             }
+            //Time.timeScale = 0;
             yield return null;
         }
        
         OnEnd();
     }
 
-    private void OnEnd()
+    public void OnEnd()
     {
+        Pause = !Pause;
+        AudioShido.clip = Loser;
+        AudioShido.Play();
+        AudioShido.loop = false;
+        YouLose.SetActive(true);
+        PauseIcon.SetActive(false);
         print("Termino");
+
     }
+
 
     public void PauseMenu()
     {
         Pause = !Pause;
-
-        pauseMenu.SetActive(Pause);
-        
     }
 }

@@ -5,14 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class ChangeScenes : MonoBehaviour
 {
-    public void LoadGame()
+    public void LoadGame(string name)
     {
-        SceneManager.LoadScene("3D");// Se carga la escena gracias al SceneManager  lo cual servira al darle el boton start 
+        SceneManager.LoadScene(name);// Se carga la escena gracias al SceneManager  lo cual servira al darle el boton start 
         Debug.Log("toco el boton yes");// manda a imprimir en la consola 
     }
     public void MainMenu()
     {
-        SceneManager.LoadScene("MainTrueMenu");// Se carga la escena gracias al SceneManager  lo cual servira al darle el boton start 
+        SceneManager.LoadScene("MainMenu");// Se carga la escena gracias al SceneManager  lo cual servira al darle el boton start 
         Debug.Log("toco el boton yes");// manda a imprimir en la consola 
     }
 

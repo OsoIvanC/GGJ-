@@ -5,10 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Yeah/Scenes/MainTrueMenu.unity
+  - enabled: 1
+    path: Assets/Yeah/Scenes/MainMenu.unity
     guid: 8be332b112a7ccb40addc6b38741a49e
   - enabled: 1
-    path: Assets/Scenes/OSO/3D.unity
+    path: Assets/Scenes/OSO/Level1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/OSO/Level2.unity
+    guid: 99a4ad30d5251a94fbad432977151107
   m_configObjects: {}

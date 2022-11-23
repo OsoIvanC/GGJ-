@@ -20,6 +20,13 @@ public class GridController : MonoBehaviour
 
     public List<Tile> tiles = new List<Tile>();
 
+    public GameObject PauseIcon;
+    public GameObject winScreen;
+
+    public AudioSource source;
+    public AudioClip winClip;
+
+
     private void Awake()
     {
 
@@ -31,6 +38,27 @@ public class GridController : MonoBehaviour
     private void Start()
     {
         CreateGrid();
+    }
+
+    public void Win()
+    {
+        //Añadir el Time.TimeScale=0
+        Debug.Log("Win");
+
+        Timer.instance.Pause = !Timer.instance.Pause;
+
+        source.clip = winClip;
+        source.Play();
+
+        source.loop = false;
+
+        winScreen.SetActive(true);
+        PauseIcon.SetActive(false);
+    }
+
+    public void Lose()
+    {
+        Timer.instance.OnEnd();
     }
 
     public void CreateGrid()
@@ -66,14 +94,16 @@ public class GridController : MonoBehaviour
         //print(grid.GetLength(0));
         //print(grid.GetLength(1));
 
-        for (int i = 0; i < grid.GetLength(0) ; i++)
+        for (int i = 0; i  <  grid.GetLength(0) ; i++)
         {
             for (int j = 0; j <  grid.GetLength(1) ; j++)
             {
-                grid[i, j]._Neighbors.North = (j + 1 < grid.GetLength(0)) ? grid[i , j + 1] : null;
+                grid[i, j]._Neighbors.North = (j + 1 < grid.GetLength(1)) ? grid[i , j + 1] : null;
                 grid[i, j]._Neighbors.South = (j - 1 >= 0) ? grid[i , j - 1] : null ;
-                grid[i, j]._Neighbors.West = (i - 1 >= 0) ? grid[i - 1, j ] : null ;
-                grid[i, j]._Neighbors.East = (i + 1 < grid.GetLength(1)) ? grid[i + 1, j ] : null;
+
+                grid[i, j]._Neighbors.West = (i - 1 >= 0) ? grid[i - 1, j] : null;
+                grid[i, j]._Neighbors.East = (i + 1 < grid.GetLength(0)) ? grid[i + 1, j] : null;
+                
 
             }
         }

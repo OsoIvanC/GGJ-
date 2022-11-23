@@ -5,6 +5,7 @@ using DG.Tweening;
 using TMPro;
 using Unity.VisualScripting;
 using static UnityEngine.GraphicsBuffer;
+using System.Reflection;
 
 public class PlayerController : MonoBehaviour
 {
@@ -32,10 +33,12 @@ public class PlayerController : MonoBehaviour
 
     public bool hasWon;
 
+
+
     [Header("UI")]
     public GameObject[] arrowsUI;
     public TMP_Text playerMoves;
-
+   
     [SerializeField]
     Vector3 offset;
 
@@ -61,7 +64,7 @@ public class PlayerController : MonoBehaviour
         //Time.timeScale = 0;
 
         if(playerMoves != null)
-            playerMoves.text = $"Movements Left {playerMovements}";
+            playerMoves.text = $"Moves: {playerMovements}";
     }
 
 
@@ -69,6 +72,8 @@ public class PlayerController : MonoBehaviour
     {
         //Debug.DrawRay(transform.position + new Vector3(0.5f, 0.25f, 0.5f), -transform.up, Color.red);
         //Debug.DrawRay(transform.position + new Vector3(0.5f, 0.25f, 0.5f), transform.forward, Color.red);
+
+
 
     }
 
@@ -92,11 +97,14 @@ public class PlayerController : MonoBehaviour
         //if (Timer.instance.Pause)
         //    return;
 
-        if (playerMovements <= 0)
-            return;
-        
         if (isMoving)
             return;
+
+        if (playerMovements <= 0)
+        {
+            GridController.instance.Lose();
+            return;
+        }
 
         //Debug.Log("moving");
 
@@ -125,18 +133,19 @@ public class PlayerController : MonoBehaviour
         UpdateArrowsUI(activeTile._Neighbors);
 
         playerMovements--;
+        
+        playerMoves.text = $"Moves: {playerMovements}";
 
-        playerMoves.text = $"Movements Left {playerMovements}";
-
+    
         GameController.instance.RandomizeObstacles();
         
-        Debug.Log($"Movimientos del jugador : {playerMovements} ");
+        //Debug.Log($"Movimientos del jugador : {playerMovements} ");
         
         //UpdateArrowsUI(activeTile._Neighbors);
 
     }
 
-    
+
     public Tile GetActiveTile()
     {
         RaycastHit hit;
@@ -175,9 +184,7 @@ public class PlayerController : MonoBehaviour
 
     public void  Win()
     {
-        Debug.Log("Has Won");        
-        hasWon = true;
-        Timer.instance.PauseMenu();
+        GridController.instance.Win();
     }
 
     public bool CanMove(Vector3 dir)
@@ -265,10 +272,6 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void CheckWin()
-    {
-
-    }
 
 
     void GetActiveNeighbors(Tile t)

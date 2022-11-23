@@ -457,7 +457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e5321fca859d4448a30138fd77511b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerMovements: 50
+  playerMovements: 25
   activeTile: {fileID: 0}
   activeNeighbors: []
   tileMask:
